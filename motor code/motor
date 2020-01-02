@@ -1,1 +1,84 @@
+int x = A0;
+int y = A1;
+int fleft = 6, fright = 9 , bleft = 5 , bright = 3;
+long threshold = 100;
+long xval, yval;
+void setup() {
+  pinMode(x, INPUT);
+  pinMode(y, INPUT);
+  pinMode(fleft, OUTPUT);
+  pinMode(fright, OUTPUT);
+  pinMode(bleft, OUTPUT);
+  pinMode(bright, OUTPUT);
+  Serial.begin(9600);
+}
+void forward()
+{
+  long value = abs(yval / 2) - 1;
+  analogWrite(fleft, value);
+  analogWrite(fright, value);
+  analogWrite(bleft, value);
+  analogWrite(bright, value);
+}
+void left()
+{
+  long value = abs(yval / 2) - 1;
+  analogWrite(fleft, value / 5);
+  analogWrite(fright, value);
+  analogWrite(bleft, value / 5);
+  analogWrite(bright, value);
+}
+void right()
+{
+  long value = abs(yval / 2) - 1;
+  analogWrite(fleft, value);
+  analogWrite(fright, value / 5);
+  analogWrite(bleft, value);
+  analogWrite(bright, value / 5);
+}
+void hardleft()
+{
+  //reverse left side motors
+}
+void hardright()
+{
+  //reverse right side motors
+}
+void reverse()
+{
+  // all reverse (cant show on LEDs)
+}
+ void reset()
+{
+  digitalWrite(fleft, LOW);
+  digitalWrite(fright, LOW);
+  digitalWrite(bleft, LOW);
+  digitalWrite(bright, LOW);
+}
+void loop() {
+  xval = analogRead(x) - 512;
+  yval = analogRead(y) - 512;
+  long angle  = 180 + atan2(xval, yval) * 180 / 3.1415;
+  long hyp = sqrt(xval * xval + yval * yval);
 
+  if (hyp > threshold)
+  {
+    if (angle < 30 || angle > 330)
+      forward();
+    else if ( angle < 60 && angle > 40 )
+      left();
+    else if ( angle < 330 && angle > 310 )
+      right();
+    else if (  angle < 100 && angle > 80 )
+      hardleft();
+    else if (  angle > 260 && angle < 280 )
+      hardright();
+    else if ( angle > 160 && angle < 200 )
+      reverse();
+  }
+  else
+  {
+    reset();
+  }
+
+}
