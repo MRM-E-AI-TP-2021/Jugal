@@ -1,0 +1,14 @@
+#include <avr/io.h>
+
+int main(void)
+{
+TCCR0 |= (1 << CS00);// initialising the timer with no prescaling
+TCNT0 = 0;// initialize timer
+while(1)
+    {
+      if (TCNT0 >= 127)
+        {
+          TCNT0 = 0;  // reset the timer
+        }
+    }
+}
