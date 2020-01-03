@@ -1,0 +1,20 @@
+#include <avr/io.h>
+#include <util/delay.h>
+int main(void)
+    {
+DDRA=0x00;// input port
+DDRD=0xff;// output port
+while(1)
+      {
+          if(PINA==0x01)
+        {
+          _delay_ms(100); 
+           PORTD=0x01;   // turn on LED 
+        }
+           else if(PINA==0x00)
+        {
+           _delay_ms(100); 
+            PORTD=0x00;// turn off LED
+        }
+     }
+}
